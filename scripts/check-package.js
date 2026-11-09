@@ -81,7 +81,11 @@ function expandir(destino) {
     .map((f) => prefijoDir + f);
 }
 
-for (const [sub, destino] of Object.entries(pkg.exports || {})) {
+// Una entrada puede ser una ruta o un objeto de condiciones (types, import, require).
+const destinos = Object.entries(pkg.exports || {}).flatMap(([s, d]) => (
+  typeof d === 'string' ? [[s, d]] : Object.values(d).map((v) => [s, v])
+));
+for (const [sub, destino] of destinos) {
   const reales = expandir(destino);
   if (!reales.length) {
     errores.push(`exports["${sub}"] → ${destino} no corresponde a ningún fichero`);
@@ -103,6 +107,21 @@ for (const [nombre, destino] of Object.entries(pkg.bin || {})) {
   if (!viaja(destino)) { errores.push(`bin["${nombre}"] → ${destino} no viaja`); continue; }
   const primera = fs.readFileSync(path.join(ROOT, destino), 'utf8').split('\n')[0];
   if (!primera.startsWith('#!')) errores.push(`bin["${nombre}"] → ${destino} sin shebang: no arrancaría`);
+}
+
+// ─── 2b. Lo que es de otros viaja con su licencia ─────────────────────────────
+// Hasta la 5.1, Space Grotesk y Syne viajaban sin su OFL y el paquete no decía
+// en ningún sitio que llevaba iconos de Lucide incrustados en cada hoja. La OFL
+// exige que la licencia acompañe a la fuente; la ISC, que el aviso acompañe a
+// las copias. Cada carpeta de fuentes que viaja lleva su LICENSE y el aviso de
+// terceros viaja con el paquete.
+
+if (!viaja('THIRD_PARTY_NOTICES.md')) errores.push('THIRD_PARTY_NOTICES.md no viaja en el paquete');
+const carpetasDeFuentes = new Set(
+  [...dentro].filter((f) => f.startsWith('fonts/')).map((f) => f.split('/').slice(0, 2).join('/'))
+);
+for (const carpeta of carpetasDeFuentes) {
+  if (!viaja(`${carpeta}/LICENSE`)) errores.push(`${carpeta}/ viaja sin su LICENSE`);
 }
 
 // ─── 3. El CSS que viaja no apunta a nada que se quede fuera ─────────────────

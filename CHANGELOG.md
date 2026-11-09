@@ -9,6 +9,104 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Los modos arrancan con menos contexto:** con un prefijo de modo ya no se lee `AI_GUIDELINES.md` (el modo trae sus reglas); los principios visuales de UI pasan del modo a `mind-system/knowledges/syx/visual-principles.md` (When relevant); `front/mobile-first.md` deja de ser Always en UI, y UX deja de repetir el contraste y los fundamentos que ya cargan sus módulos Always. Entrada de UI de 19,5k a 11,4k tokens, de UX de 20,7k a 15,5k; el límite de `check:conocimiento` baja de 22 000 a 18 000. En una evaluación A/B de las cuatro tareas de UI y UX la nota determinista no bajó (28/32 → 30/32; `_agents/evals/runs/2026-11-07-entrada-modos/`).
+- **CI más rápida:** la prueba de navegador se parte en tres trabajos en paralelo (componentes y regresión visual · foco · páginas del sitio). Iba en serie y marcaba el tiempo de cada PR, unos 8 min; el más lento de los tres debería acabar en unos 3,5 min. Los nombres de los trabajos cambian a `Navegador · …`.
+- **Una sola escala de breakpoints** (paso 2 del plan de mejora): el mapa con nombre de `breakpoint()` lee los primitivos de `tokens/primitives/_breakpoints.scss` y gana los alias `sm`, `md`, `lg`, `xl` y `xxl`. **Cambia el comportamiento:** `tablet` pasa de 50em (800 px) a 48em (768 px), como ya hacían la rejilla y las utilidades; `desktop` pasa de 70em (1120 px) a 80em (1280 px), y el Theme Builder parte la pantalla a 48em en vez de a 861 px. La rejilla, las utilidades de visualización y los helpers usan `breakpoint()` en lugar de valores a mano. `check:breakpoints` lo vigila.
+- **Trazos de marca con la variante fuerte:** el borde de check y radio al pasar el ratón, el de la paginación, el de la fila de tabla, el filete de la cita y el borde de la tarjeta destacada leen `--semantic-color-primary-strong` (3:1, WCAG 1.4.11) en lugar del relleno de marca. En los temas cuyo primario cae fuera de la franja legible, el trazo se ve algo más oscuro en claro y más claro en oscuro.
+- **El escáner distingue un tema de una aplicación:** un fichero que declara `@mixin theme-…` o usa `dark-mode-tokens()` se juzga con el contrato de THEMING-RULES (paleta propia, primitivos y literales permitidos; un `--component-*` que lee un primitivo o un color a pelo sigue siendo desviación). La plantilla pasa de 14 avisos medios y 8 bajos a ninguno, y los siete temas también. Ya no cuenta como color a pelo lo que va en un comentario o en la condición de un `@supports`, ni como token inexistente lo que declara el CSS del sistema (los iconos `--lc-icon-*`).
+- **`check:vitrina` sin reglas apagadas:** las páginas propias pasan el escáner entero. El Theme Builder usa su paleta `--builder-*` en lugar de primitivos, tiene salida para `prefers-reduced-motion` y sobrescribe el token del título en lugar de repintarlo; la barra lateral de docs pinta su propio `docs-sidebar__icon`.
+- **ATLAS y el córtex citan clases que existen:** `atom-headline--*` pasa a `atom-title--h1…h6`; las piezas editoriales llevan el prefijo del proyecto (`diario-`), como pide el contrato de consumo; los ejemplos de `component-patterns.md` usan el marcado real de `atom-btn`, `mol-form-field` y `org-site-header`.
+- **README y CONSUMING**: la instalación pasa a `npm install syx-design-system`, publicado en npm desde la 5.1.0.
+- **Home**: el *Quick start* enseña `npm install syx-design-system` en lugar de clonar y compilar con Sass.
+- **Web pública**: canonical y `og:url` propios en cada página (apuntaban al repositorio de GitHub), `og:image` y `twitter:image` con `assets/og-image.jpg` (era un JPEG con extensión `.png`), tarjeta `summary` porque la imagen es cuadrada, `sitemap.xml` nuevo y `robots.txt` apuntando a él en lugar de a `syntaxys.design`.
+
+### Fixed
+
+- **El anillo de foco de `syx-sketch` y `example-01` sigue a la variante fuerte** (plan de generación, fase 2a): declaraban `--semantic-focus-ring-color: var(--semantic-color-primary)` y se saltaban la derivación `-strong`. Con los azules de hoy pasa, pero con una marca clara (amarillo `#ffe600`, aguamarina `#7fffd4`, lima `#39ff14`) el anillo bajaba de 3:1 (WCAG 1.4.11): 16 fallos de `anillo-de-foco` en `check:contraste` por marca, 0 con `var(--semantic-color-primary-strong)`. Los otros cinco temas ya no lo hacían.
+- **`check:escaner` ya no lleva el primario de `syx-sketch` escrito a mano** (fase 2b): lo pregunta al sistema (`getToken`, lo mismo que `get_token`). Cambiar la marca rompía dos casos por la razón equivocada; con un primario `#ffe600` pasa 43/43 (antes 41/43).
+- **Palabras sin cortes** (fase 2 del plan de generación): una URL o una palabra larga desbordaba el título de tarjeta, el título y el cuerpo de alerta, la etiqueta y el mensaje de campo y el botón (este, 174 px a 1280 px, porque `break-word` no rebaja el ancho mínimo). Ahora llevan `overflow-wrap: anywhere`. **Cambia el comportamiento:** un botón en una fila flex sin `wrap` que no cabe parte la palabra en vez de salirse.
+- `ux.md` y `front/mobile-first.md` documentaban breakpoints que no son la escala (640, 800, 1120 px); `ux.md` citaba un `is-loading` que `atom-btn` no tiene y cambiaba el nombre del botón de mostrar contraseña al pulsarlo.
+- **La jerarquía de titulares se invertía en móvil:** por debajo de ~540 px el h3 (`2xl`, 30 px) salía más pequeño que el h4 (`xl`, 31,25 px). Los titulares usan ahora dos razones: ×1,125 en el suelo (h4 28 px, h3 31,6 px, h2 35,6 px, h1 40 px a 375 px) y ×1,25 en el techo, que no cambia. **Cambia el aspecto en móvil:** el h4 baja unos 3 px y el h3 y el h2 suben de 1,5 a 2 px. Además, `2xl`, `3xl` y `4xl` no llegaban a su máximo a 1440 px (el h2 se quedaba en 51 px de 55); ahora sí. Lo vigila `check:escala-tipo`.
+- **Opacidad en Figma:** `contracts/figma/*.figma.json` exportaba la opacidad en tanto por uno (0.5) y Figma la lee en porcentaje: una capa enlazada quedaba al 0,5 %. Ahora va en 0–100, y `check:figma` falla si vuelve.
+- **Nombres accesibles:** el enlace a GitHub de las tres páginas se anunciaba «View on GitHub» con el texto visible «GitHub»; ahora «GitHub repository». El ejemplo de `org-site-header` en docs ya no tapa el texto visible con otro nombre.
+- **`syx-scan` no enseñaba los tipos sin título:** salían en el recuento y en `--fallar-si-*`, pero no en pantalla.
+- **Fuente raíz en %** (F0-09): `--reset-html-font` fijaba el tamaño en px (de 13 a 18 según el tema) y el interlineado a veces en px. Con el navegador en 20 px, el rem seguía en 16 y nada crecía. Ahora va en % (100 % = la preferencia del navegador; a 16 px se ve igual que antes) y el interlineado, sin unidad. `check:raiz` lo vigila, con su caso de mutación.
+- **Contraste en navegadores sin color relativo** (F0-08): Chrome y Edge 111–118, Firefox 121–127 y Safari 16.2–16.3, que el browserslist declara soportados, pintaban las tintas de marca y de estado, las variantes fuertes y los colores de código con el relleno de marca: hasta 49 pares por debajo de AA en un tema. Cada tema lleva ahora `_tintas-respaldo.scss`, generado desde su hoja compilada, con esos valores como literal dentro de `@supports not (…)`. El browserslist no cambia.
+- **Theme Builder**: tres interruptores (*Fluid Typography*, *Extended Color Palette* y *Disable Legacy Bridge*) se anunciaban sin nombre: su `aria-labelledby` apuntaba al deslizador vacío del interruptor anterior. Ahora apuntan a su título.
+
+### Added
+
+- **Tres reglas nuevas en `syx-scan`** (F1-06): `cifras-de-estilo-antiguo` (media) en tablas, horas, fechas e importes; `etiqueta-de-estado-pequena` (baja) por debajo de 14 px; `nombre-sin-texto-visible` (WCAG 2.5.3): media si el nombre accesible no contiene el texto visible, baja si lo contiene sin empezar por él.
+- **`check:conocimiento` vigila las clases**, no solo los tokens: toda `atom-`/`mol-`/`org-` citada en el córtex, la gobernanza, ATLAS, las entradas, las guías de `scss/` y los modos tiene que existir en el CSS compilado (había 68 que no existían).
+- **Tokens que faltaban o no se leían:** `--component-list-ordered-counter-bg` y `-color` para el contador de `atom-list--ordered`, que leía el semántico directamente; los bordes `--component-button-{variante}-border` y `-filled-border` existían y nadie los leía: ahora los lee `atom-btn`, con el mismo valor que tenía el borde.
+- Casos de mutación nuevos para el escáner en temas, la vitrina, los breakpoints y las clases fantasma.
+- **Registro de métricas por versión** (F1-08): `npm run build:metricas` escribe `metrics/<versión>.json` (tamaño del paquete, gzip de cada hoja de `dist/`, bytes de fuentes por tema, avisos del escáner sobre la plantilla, pasos de `check` y casos de mutación) e imprime la diferencia con la versión anterior. La release lo comprueba (`check:metricas`) y lo adjunta. La línea base es `metrics/5.1.0.json`, medida sobre la 5.1.0 publicada. No mide el tiempo de CI.
+- **`syx-tintas-respaldo`**, comando del paquete: genera el parcial de respaldo de un tema propio desde su hoja compilada (`npx syx-tintas-respaldo css/mi-tema.css scss/themes/mi-tema/_tintas-respaldo.scss`). La plantilla trae el parcial vacío y ya lo incluye.
+- **`check:contraste` mide dos ramas**, con y sin color relativo: un token que sin él siga siendo una expresión relativa sale «sin medir» y no aprueba. **`check:tintas-respaldo`** falla si un parcial está desfasado o si aparece un token relativo sin respaldo. `check:plantilla` genera el respaldo de la plantilla con el comando, como haría quien crea un tema, antes de medirla.
+- **`THIRD_PARTY_NOTICES.md`**, que viaja en el paquete: las seis familias tipográficas (OFL 1.1), los iconos de Lucide incrustados en cada hoja (ISC; MIT los derivados de Feather), y GSAP y awesome-design-md, que solo usa el sitio.
+- **Licencias que faltaban**: `fonts/google-space-grotesk/LICENSE`, `fonts/google-syne/LICENSE` e `img/icons/lucide/LICENSE`.
+- **`check:package`** falla si una carpeta de fuentes viaja sin su `LICENSE` o si el aviso de terceros no viaja.
+
+### Removed
+
+- **`salud-css.json`**: métricas del benchmark externo, que vive fuera del repositorio.
+- **`site.webmanifest` y `browserconfig.xml`**: ninguna página los enlazaba y sus iconos no existían.
+
+### Security
+
+- `download-artifact` 8.0.2 y `configure-pages` 6.0.0, a la par de las demás actions.
+- **Publicación en tres trabajos** (F0-05): `construir` (solo lectura, sin secretos) pasa la cadena y empaqueta una vez; `release` sube ese `.tgz` con su sha256; `npm` no hace checkout ni `npm ci`, se autentica con Trusted Publishing (OIDC, sin `NPM_TOKEN`) y publica el `.tgz` de la release con `--ignore-scripts`. Antes un solo trabajo tenía a la vez `contents: write`, `id-token` y el token después de instalar las devDependencies, y `npm publish` volvía a empaquetar.
+- **Actions fijadas por SHA** en los cinco workflows, con su versión en un comentario, y **Dependabot** para `github-actions` (F0-06). La CLI de Claude Code de `evals.yml` va con versión fija.
+- **`check:acciones`** lo vigila, con dos casos de mutación.
+- **Dependabot** agrupa solo las subidas menores y de parche de las actions; cada versión mayor abre su propia PR.
+- **Quién aprueba** (F0-10): `aprobado-humano` solo cuenta si la puso, la última vez, una cuenta de persona con permiso *maintain* o *admin*. Una etiqueta puesta por un bot, una app o una cuenta de solo escritura se ignora y la PR queda sin aprobar. No se exige que sea distinta del autor: SYX tiene un solo mantenedor. `check:acciones` lo vigila.
+
+## [5.1.0] — 2026-11-06
+
+### Added — auditoría de 2026-11, tanda 3
+
+- **Tipos y ESM**: `index.d.ts`, `js/syx-*.d.ts` e `index.mjs`. `import { getToken } from 'syx-design-system'` ya funciona: antes daba `SyntaxError`.
+- **`SECURITY.md`, `CONTRIBUTING.md` y *Versioning* en el README**: qué es estable, qué entra en cada tipo de versión y cómo se deprecia.
+
+### Changed
+
+- **El paquete** deja de llevar `_agents/` salvo `_agents/modes/`, y los scripts `check-*`, `eval-*`, `patch-*` y el hook: 121 ficheros internos, con ejemplos de lo que está mal al alcance de cualquier agente que leyera `node_modules`. Los modos dicen qué hacer si un módulo del córtex no existe.
+- **`release.yml`** se puede reintentar: si la release ya existe, sigue con npm. `repository.url` usa la mayúscula real del repositorio, que `--provenance` compara.
+- **Evals**: el workflow corre con `--estricto`: una ejecución con 0 aprobadas salía en verde.
+- **Presupuesto de contexto**: `check:conocimiento` mide también la ruta de `AGENTS.md` con `decision-record.md`, con techo de 26 000 tokens. `AGENTS.md` deja de mandar leer `contracts/rules.json`, que `CLAUDE.md` mandaba no leer.
+
+### Fixed — auditoría de 2026-11, tanda 2
+
+- **`check:compilado`**: para R01 decide la capa donde acaba la declaración, no el fichero que la escribió. `$p: unquote('var(--primitive-x)'); @include padding($p)` blanqueaba el primitivo porque lo emitía un mixin. Falla además si un `--primitive-*`, `--semantic-*` o `--theme-*` se declara en una ruta `pr`: R11 mira qué nombre se lee, no quién lo declara.
+- **`generate-utility*`** da `@error` con `position` y `transition*`.
+- **Colores literales en componentes**: stylelint niega `rgb()`, `hsl()`, `oklch()` y similares y los colores con nombre en átomos, moléculas, organismos y layout. Son reglas de lint y no R-numbers: el contrato sigue en R01–R11. `mol-code-snippet` pierde seis fallbacks que eran valores literales de tokens ya declarados.
+- **`check:cadena`**, en `check`: exige los pasos imprescindibles, que cada uno ejecute su script y que el lint mire `scss/`. Quitar `check:compilado`, dejarlo en `node -e 0` o declarar `ignoreFiles` daba verde.
+- **Guardianes vacíos**: `check:contraste` falla con menos de 100 pares o mínimos fuera de WCAG, y `check:mutacion` con menos de 30 casos: «0 de 0 paradas» era verde.
+- **`propose.js files`** niega un componente que no llega al CSS y dice que falta su línea en el bundle, que es de nivel humano. `AI_GUIDELINES.md` y `create-component.md` corrigen la ruta del `@forward` y dejan de mandar editar el registro a mano.
+- **Servidor MCP**: valida los argumentos contra `inputSchema`: `scan_for_drift {}` respondía `total: 0`, un limpio sin haber mirado nada, y `mode: 'sepia'` daba `found: true`. Responde a `ping`. Una herramienta desconocida es `-32602`. `scan_for_drift` se limita a ficheros de código bajo la carpeta del proyecto, o bajo `SYX_SCAN_ROOT`, de menos de 5 MB. `validate_snippet` normaliza `path`, y `get_token` no confunde `constructor` con un token.
+- **Sugerencias**: `get_token` y `get_component` ordenan por parecido real, y `get_component` entiende `button`, `modal`, `dropdown` y otros sinónimos. Antes, una errata de una letra no llevaba al token correcto.
+- **Tokens del sitio**: `get_token` los marca con `scope: 'site'` y `find_token_by_value` da primero los del sistema.
+- **`syx.utilities.min.css`** trae los tokens compartidos que lee: sobre `core` quedaban 21 sin declarar. `build-dist` falla si esa combinación vuelve a dejar alguno.
+- **Modo AUDIT**: el veredicto sale solo de R01–R11 y todo lo demás es asesor; pedirle un arreglo se pasa a otro modo; un valor sin token se resuelve con `needs a token: hand to TOKEN`; R02 cita su excepción.
+- **Composición**: `+` significa que el segundo evalúa el output del primero; `[blocked: human]` detiene un pipeline que depende de lo que solo se puede recomendar; `THEME → UI` es inválido sin BRAND delante.
+
+### Fixed — auditoría de 2026-11, tanda 1
+
+La auditoría de noviembre encontró lo que `npm run check` no miraba: los bundles que no son `full`, el estado hover y lo que un agente recibe como «válido». Informe completo fuera del repositorio.
+
+- **Paginación.** Al pasar el ratón por la página actual, el `:hover` general ganaba por especificidad y pintaba el número del color del fondo (1:1 en todos los temas). Prev/next pasan de imagen negra a máscara con `currentColor`, leyendo por fin `--component-pagination-icon-prev/next`: eran negros también en oscuro. En `forced-colors`, la página actual se marca con `Highlight`.
+- **Contraste en hover.** `--component-button-{primary,secondary,tertiary,quaternary}-color-hover` y `--component-pagination-color-hover` usaban un tono de relleno como texto: fallaban AA en 17-20 de 28 estados. Pasan a `--semantic-color-{rol}-text`. `contrast.json` añade 9 pares (118 pares, 3304 medidas).
+- **Bundles `core` y `app`**: pedían `--lc-icon-*` sin declararlos, y prev/next y las viñetas salían en blanco. **`atom-icon-nucleo`**, generado por `build-lucide-tokens.js`, lleva los 7 iconos que leen los componentes. **`check:huerfanos` compila ahora `app`, `blog`, `core` y `marketing`**: decía medir «bundle por bundle» y solo leía los ocho de `css/`.
+- **`breakpoint()`** con una clave desconocida pasa de `@warn` a `@error`: la regla desaparecía del CSS sin que nada fallase. `front/mobile-first.md`, cargado siempre por UI y UX, y otros tres textos enseñaban `sm` y `lg`, que no existen.
+- **`syx-scan`** ya no da por inventada `.mol-tabs`: el Quick Start del README salía en rojo. La excepción vivía en `check-usage.js`, de modo que el guardián interno tapaba lo que sufría quien consume SYX; pasa al escáner.
+- **`propose.js`** ejecuta `npm run lint`: una propuesta salía en verde con hex y px que la CI rechazaba. `token` niega un `--value` con `;`, llaves o saltos de línea, que colaba otra declaración, y un `--why` con `syx-allow`, que redactaba su propia excepción.
+- **`validate_snippet`** dice qué no revisa, en `notChecked`.
+- **`npx -y syx-mcp` no es un paquete, es un `bin`**: pasa a `npx -y -p syx-design-system syx-mcp` en todos los documentos.
+- **Rangos de reglas**: «R01–R07» y «R01–R08» seguían en una treintena de documentos; literalmente, R09–R11 quedaban negociables. `check:recuentos` vigila ahora esos rangos y las tarjetas de la portada, que anunciaban 19 átomos y 6 moléculas.
+- **`CLAUDE.md`, `AGENTS.md` y `README.md`** llamaban «automática» a la documentación, que en `trust.json` es `pr`. Las reglas base declaran la exención de SKETCH y CREATIVE, en vez de decir que nada las anula. La instrucción tras escribir código incluye `npm run lint`.
+
 ### Added — web: la pila del hero, animada
 
 La figura del hero de la home (el alzado de las 7 `@layer`) deja de ser una imagen fija y pasa a ser un SVG que se dibuja en el navegador, en isométrica real, con GSAP. Solo la web: nada de esto entra en el paquete de npm.

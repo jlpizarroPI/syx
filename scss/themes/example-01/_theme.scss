@@ -7,6 +7,7 @@
 // ================================================
 
 @use '../../abstracts/index' as *;
+@use 'tintas-respaldo' as *; // GENERADO: scripts/build-tintas-respaldo.js
 
 @mixin theme-example-01 {
   :root {
@@ -129,7 +130,9 @@
     --semantic-color-border-strong: oklch(0.78 0.019 261.325);
 
     // State
-    --semantic-focus-ring-color: var(--semantic-color-primary);
+    // 1.4.11: el anillo sigue a la variante fuerte, no al primario: con una
+    // marca clara (amarillo, aguamarina, lima) el primario no llega a 3:1.
+    --semantic-focus-ring-color: var(--semantic-color-primary-strong);
 
     // Fonts
     --semantic-font-family-primary: var(--primitive-font-family-inter);
@@ -142,7 +145,7 @@
     --semantic-filter-primary: brightness(0) saturate(100%) invert(28%) sepia(80%) saturate(1800%) hue-rotate(230deg) brightness(95%) contrast(95%);
 
     // Reset — body now uses Inter
-    --reset-html-font: normal normal 400 16px/24px var(--primitive-font-family-inter);
+    --reset-html-font: normal normal 400 100%/1.5 var(--primitive-font-family-inter);
     --reset-body-font-size: calc(4 * var(--primitive-space-base));
     --reset-body-line-height: calc(5 * var(--primitive-space-base));
     --reset-h-font-family: var(--primitive-font-family-syne-bold);
@@ -256,6 +259,9 @@
   :root[data-theme="light"] {
     color-scheme: light;
   }
+  // Navegadores del browserslist sin color relativo: las tintas como literal.
+  // Va al final para ganar, a igual especificidad, a lo declarado arriba.
+  @include tintas-respaldo;
 }
 
 // FONTS — single source of truth: setup and every bundle-*.scss

@@ -24,7 +24,8 @@ Ninguna de las cinco autoriza nada. El conocimiento informa; la regla ejecuta.
 
 | Tramo | Qué suma | Límite |
 |---|---|---|
-| **Entrada** | `CLAUDE.md` + lo que manda leer antes de nada (`AI_GUIDELINES.md`, `contracts/rules.json`) + el fichero del modo + sus módulos **Always** | ≤ 22 000 tokens |
+| **Entrada** | `CLAUDE.md` + el fichero del modo + sus módulos **Always** (con un modo no se lee `AI_GUIDELINES.md`) | ≤ 18 000 tokens |
+| **Ruta `AGENTS.md`** | Lo mismo con `AGENTS.md` en lugar de `CLAUDE.md`, más `decision-record.md` salvo en SKETCH | ≤ 26 000 tokens |
 | **Peor caso** | Entrada + todo **When relevant** + **With GSAP** + **Self-check** + la mayor carga **On request** | ≤ 60 000 tokens |
 
 Tokens ≈ bytes / 3,5. Las cifras no se copian aquí a mano —se quedaban viejas: esta página llegó a prometer un techo de 83 KB que no contaba la capa GSAP mientras el peor caso real de CREATIVE pasaba de 270 KB—; las mide e imprime `npm run check:conocimiento`, que falla si un modo se pasa. Si se pasa, la salida es bajar un módulo de **Always** a **When relevant** con su disparador, partir el módulo grande o citar el fichero concreto en vez de la carpeta; no subir el límite.
@@ -48,7 +49,7 @@ Tokens ≈ bytes / 3,5. Las cifras no se copian aquí a mano —se quedaban viej
 | `ui/motion-principles.md` | | | ● | | | ○ | | | ○ | |
 | `ui/practical-ui.md` | | | ○ | | | | | | ○ | |
 | `front/html-semantics.md` | | ● | | | | | | | | |
-| `front/mobile-first.md` | · | ● | | | | ● | ○ | | | |
+| `front/mobile-first.md` | · | ● | | | | ○ | ○ | | | |
 | `front/accessibility-wcag.md` | | ● | | | | | ○ | | | |
 | `front/progressive-enhancement.md` | | ○ | | | | | ○ | | | ○ |
 | `front/javascript-patterns.md` | | ○ | | | | | | | | |
@@ -58,6 +59,7 @@ Tokens ≈ bytes / 3,5. Las cifras no se copian aquí a mano —se quedaban viej
 | `syx/token-system.md` | | | | ● | ● | ● | ● | ● | ● | ● |
 | `syx/scss-pipeline.md` | | | | | | ● | ● | | | ● |
 | `syx/component-patterns.md` | · | | ○ | | | ● | ● | ○ | | ● |
+| `syx/visual-principles.md` | | | | | | ○ | | | | |
 | `syx/theme-system.md` | | | | | ● | | ○ | | ● | |
 | `syx/color-oklch.md` | | | | ○ | ● | | | | ○ | |
 | `branding/perception-of-prestige-foundations.md` | | · | ● | | | | | | ● | |
@@ -127,6 +129,7 @@ La lectura que importa para el mantenimiento. **Un módulo sin ningún modo en s
 | `syx/` | `token-system` | TOKEN · THEME · UI · AUDIT · MIGRATE · BRAND · ROADMAP |
 | | `scss-pipeline` | UI · AUDIT · ROADMAP |
 | | `component-patterns` | SKETCH · CREATIVE · UI · AUDIT · MIGRATE · ROADMAP |
+| | `visual-principles` | UI |
 | | `theme-system` | THEME · AUDIT · BRAND |
 | | `color-oklch` | TOKEN · THEME · BRAND |
 | `branding/` | `perception-of-prestige-foundations` | UX · CREATIVE · BRAND |
@@ -185,11 +188,13 @@ Cualquier otro módulo que acabe sin modo en el índice inverso es un huérfano 
 | Operador | Sintaxis | Semántica |
 |---|---|---|
 | `→` | `[SYX: UX → UI]:` | **Pipeline.** El output de cada modo es el input del siguiente. Un paso a la vez. |
-| `+` | `[SYX: UI + AUDIT]:` | **Evaluativa.** Ambos modos operan sobre el mismo input; los dos outputs se presentan juntos. |
+| `+` | `[SYX: UI + AUDIT]:` | **Evaluativa.** El segundo evalúa el output del primero, en el mismo turno; los dos se presentan juntos. |
 
-**Agrupación**: `+` agrupa antes que `→`. El `+` une a los modos que comparten artefacto; el `→` encadena esos grupos. `[SYX: UX → UI + AUDIT]:` se lee `UX → (UI + AUDIT)`: UX primero, y después UI implementa mientras AUDIT verifica ese mismo output. Para otra agrupación, separar en turnos.
+**Agrupación**: `+` agrupa antes que `→`. El `+` une a los modos que comparten artefacto; el `→` encadena esos grupos. `[SYX: UX → UI + AUDIT]:` se lee `UX → (UI + AUDIT)`: UX primero, después UI implementa y AUDIT verifica ese output. Para otra agrupación, separar en turnos.
 
 En un pipeline, si un paso intermedio no tiene trabajo, **el pipeline no se detiene**: continúa con los recursos existentes y emite un handoff explícito.
+
+**Bloqueado no es sin trabajo.** Si un paso solo puede recomendar lo que el siguiente necesita (un semántico que TOKEN no escribe, un tema que THEME no instala, la línea del bundle de un componente), el pipeline **se detiene** ahí y emite `[blocked: human]` con lo que hay que aplicar. Seguir significaría construir sobre ficheros que nadie ha instalado.
 
 ```
 [TOKEN — sin trabajo]: los tokens necesarios ya existen:
@@ -209,7 +214,7 @@ Abortar es decisión del usuario, no del modo.
 | `[SYX: UX → TOKEN → UI + AUDIT]:` | Flujo completo con verificación |
 | `[SYX: TOKEN → THEME]:` | Tema nuevo tras verificar cobertura de semánticos |
 | `[SYX: TOKEN → THEME + AUDIT]:` | Tema con verificación de cobertura |
-| `[SYX: AUDIT → MIGRATE]:` | Deuda técnica, si son pocas variables |
+| `[SYX: AUDIT → MIGRATE]:` | Deuda técnica, si son pocas variables. Turno a turno, nunca automático: ver `constitution.md` |
 | `[SYX: CREATIVE → TOKEN → UI]:` | Llevar un experimento a producción |
 | `[SYX: CREATIVE → TOKEN → UI + AUDIT]:` | Experimento a producción con verificación |
 | `[SYX: UI + AUDIT]:` | Implementar y verificar en el mismo flujo |
@@ -217,7 +222,7 @@ Abortar es decisión del usuario, no del modo.
 | `[SYX: UX + AUDIT]:` | Propuesta HTML con verificación de jerarquía y ARIA |
 | `[SYX: TOKEN + AUDIT]:` | Definir tokens y verificar R05–R08 |
 | `[SYX: BRAND → THEME]:` | Identidad completa: BRAND decide los siete ejes, THEME construye y contrasta la escala |
-| `[SYX: BRAND → THEME → UI]:` | Identidad completa hasta el componente que la estrena |
+| `[SYX: BRAND → THEME → UI]:` | Identidad completa hasta el componente que la estrena. Se detiene en `[blocked: human]` hasta que una persona instale el tema |
 | `[SYX: BRAND → CREATIVE]:` | Página experimental que **hereda** registro y contrato en vez de elegir carácter. La dirección de arte de CREATIVE pasa a ser una desviación declarada, no una invención |
 | `[SYX: BRAND → THEME → CREATIVE]:` | Lo mismo, pero además con los tokens ya construidos: la página hereda la identidad **y** los valores que la pintan |
 | `[SYX: ROADMAP → TOKEN]:` | Una propuesta del roadmap que sobrevive a `find_capability` y se convierte en tokens |
@@ -230,9 +235,9 @@ Abortar es decisión del usuario, no del modo.
 |---|---|
 | `SKETCH + AUDIT` | SKETCH está exento de contratos por diseño. Auditarlo es contradictorio. |
 | `SKETCH + UI` | Boceto y producción. No hay handoff útil en el mismo turno. |
-| `CREATIVE + AUDIT` | CREATIVE está exento de R01–R08. Usar `CREATIVE → TOKEN → UI + AUDIT`. |
+| `CREATIVE + AUDIT` | CREATIVE está exento de R01–R11. Usar `CREATIVE → TOKEN → UI + AUDIT`. |
 | `UI → TOKEN` | El orden es al revés. TOKEN define, UI implementa. |
-| `THEME → UI` | THEME opera en `_theme.scss`. No genera componentes para que UI procese. |
+| `THEME → UI` (sin BRAND delante) | THEME opera en `_theme.scss`. No genera componentes para que UI procese. |
 | `MIGRATE + AUDIT` | AUDIT detecta, MIGRATE resuelve. Solo tiene sentido `AUDIT → MIGRATE`. |
 | `UI → BRAND` | El orden es al revés. Una identidad se decide antes que lo que la viste. |
 | `THEME → BRAND` | Igual de invertido, y más caro: produce una paleta sin identidad a la que responder. Es exactamente como seis de los siete temas acabaron siendo recoloreados. |

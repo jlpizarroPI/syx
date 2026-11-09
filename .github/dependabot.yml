@@ -1,0 +1,21 @@
+# SYX — Dependabot
+# Las actions van fijadas por SHA (auditoría 2026-11, F0-06): una etiqueta
+# como @v4 se puede mover y ejecutar otro código con los permisos del
+# trabajo. Dependabot propone el SHA nuevo con su versión en el comentario,
+# y la PR pasa por la misma revisión que cualquier otra.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    # Las subidas menores y de parche van juntas en una PR. Cada versión
+    # mayor llega en la suya: puede cambiar el comportamiento, y release.yml
+    # (solo corre al etiquetar) y pages.yml (solo en main) no se prueban en la
+    # CI de la PR, así que se revisan sus notas una a una.
+    groups:
+      actions-menores:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+    commit-message:
+      prefix: 'chore(actions)'

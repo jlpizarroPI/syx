@@ -29,6 +29,7 @@
 // ================================================
 
 @use '../../abstracts/index' as *;
+@use 'tintas-respaldo' as *; // GENERADO: scripts/build-tintas-respaldo.js
 
 // ================================================
 // MODO CLARO — tokens
@@ -76,7 +77,9 @@
   --semantic-color-on-secondary: var(--semantic-color-ink-dark);
   --semantic-color-on-state-hover-secondary: var(--semantic-color-ink-dark);
   --semantic-color-on-quinary: var(--semantic-color-ink-light);
-  --semantic-focus-ring-color: var(--semantic-color-primary);
+  // 1.4.11: el anillo sigue a la variante fuerte, no al primario: con una
+  // marca clara (amarillo, aguamarina, lima) el primario no llega a 3:1.
+  --semantic-focus-ring-color: var(--semantic-color-primary-strong);
   // gray-500 se quedaba en 3,5:1 sobre el campo blanco; el placeholder es
   // texto y pide 4,5. El terciario del tema (gray-600) da 5,5.
   --semantic-color-placeholder: var(--semantic-color-text-tertiary);
@@ -86,6 +89,8 @@
   --component-button-secondary-filled-color: var(--semantic-color-on-secondary);
   --component-button-secondary-filled-color-hover: var(--semantic-color-on-state-hover-secondary);
   --component-button-secondary-color: var(--semantic-color-secondary-strong);
+  --component-button-secondary-border: var(--semantic-color-secondary-strong); // el borde lee ahora su propio token
+  --component-button-secondary-filled-border: var(--semantic-color-secondary-strong);
   // Tonos suaves: la paleta de plano del tema, peldaño 50 de fondo, 200 de
   // borde y 700 de tinta (600 el rojo). Antes se escribían píldora a píldora
   // en el componente; desde la acción 14 (2026-10) son roles semánticos y la
@@ -209,6 +214,8 @@
   --component-button-secondary-filled-color: var(--semantic-color-text-inverse);
   --component-button-secondary-filled-color-hover: var(--semantic-color-text-inverse);
   --component-button-secondary-color: var(--semantic-color-secondary-strong);
+  --component-button-secondary-border: var(--semantic-color-secondary-strong); // el borde lee ahora su propio token
+  --component-button-secondary-filled-border: var(--semantic-color-secondary-strong);
 
   // Superficies con color: en oscuro los tintes claros
   // desaparecen, así que van a navy con trazo de color.
@@ -518,7 +525,7 @@
     // bg-secondary, lo que dejaba un escalón visible donde termina el
     // telón del hero (que se funde a bg-primary).
     --reset-body-background-color: var(--semantic-color-bg-primary);
-    --reset-html-font: normal normal 400 16px/24px var(--semantic-font-family-primary);
+    --reset-html-font: normal normal 400 100%/1.5 var(--semantic-font-family-primary);
     --reset-body-font-size: var(--semantic-font-size-body);
     --reset-body-line-height: var(--primitive-line-height-relaxed);
     --reset-h-font-family: var(--semantic-font-family-heading);
@@ -738,6 +745,9 @@
   :root[data-theme="light"] {
     @include syx-sketch-light-tokens;
   }
+  // Navegadores del browserslist sin color relativo: las tintas como literal.
+  // Va al final para ganar, a igual especificidad, a lo declarado arriba.
+  @include tintas-respaldo;
 }
 
 // FONTS — single source of truth: setup and every bundle-*.scss

@@ -36,7 +36,7 @@
     --semantic-font-family-primary-bold: var(--primitive-font-family-inter);
     --semantic-font-weight-primary-bold: var(--primitive-font-weight-regular);
     --semantic-font-family-heading: var(--primitive-font-family-inter);
-    --reset-html-font: normal normal 400 16px/24px var(--primitive-font-family-inter);
+    --reset-html-font: normal normal 400 100%/1.5 var(--primitive-font-family-inter);
 
     // Fallback defaults so the page isn't broken on first load
     --semantic-color-bg-primary: oklch(1 0 0);
@@ -68,6 +68,8 @@
     --builder-chrome-value: var(--primitive-color-blue-400);
     --builder-chrome-accent: var(--primitive-color-blue-500);
     --builder-chrome-input-text: var(--primitive-color-white);
+    --builder-chrome-strong: var(--primitive-color-white);
+    --builder-chrome-warning: var(--primitive-color-warning-500);
     --builder-font-size-title: var(--primitive-font-size-md);
     --builder-font-size-control: var(--primitive-font-size-sm);
     --builder-space-1: calc(1 * var(--primitive-space-base));

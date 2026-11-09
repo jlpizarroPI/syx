@@ -7,6 +7,7 @@
 // ================================================
 
 @use '../../abstracts/index' as *;
+@use 'tintas-respaldo' as *; // GENERADO: scripts/build-tintas-respaldo.js
 
 @mixin theme-example-05 {
   :root {
@@ -149,7 +150,7 @@
     --semantic-font-family-heading: var(--primitive-font-family-bebas-regular);
 
     // Reset — Bebas Neue COLOSSAL, deep night bg, gold text
-    --reset-html-font: normal normal 400 15px/1.65 var(--primitive-font-family-inter-regular);
+    --reset-html-font: normal normal 400 93.75%/1.65 var(--primitive-font-family-inter-regular);
     --reset-body-font-size: calc(4 * var(--primitive-space-base));
     --reset-body-line-height: calc(7 * var(--primitive-space-base));
     --reset-h-font-family: var(--primitive-font-family-bebas-regular);
@@ -272,6 +273,9 @@
       --semantic-shadow-lg: var(--primitive-shadow-lg);
     }
   }
+  // Navegadores del browserslist sin color relativo: las tintas como literal.
+  // Va al final para ganar, a igual especificidad, a lo declarado arriba.
+  @include tintas-respaldo;
 }
 
 // FONTS — single source of truth: setup and every bundle-*.scss

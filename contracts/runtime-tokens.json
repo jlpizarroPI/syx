@@ -2,8 +2,8 @@
   "_meta": {
     "source": "css/styles-theme-example-01.css",
     "stats": {
-      "total": 1442,
-      "official": 1380,
+      "total": 1444,
+      "official": 1382,
       "legacy": 62
     }
   },
@@ -891,28 +891,28 @@
       "category": "primitive"
     },
     "--primitive-font-size-xl": {
-      "value": "clamp(1.953rem, 1.86rem + 0.37vw, 2.197rem)",
+      "value": "clamp(1.758rem, 1.603rem + 0.661vw, 2.197rem)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "primitive"
     },
     "--primitive-font-size-2xl": {
-      "value": "clamp(1.875rem, 1.63rem + 1.05vw, 2.747rem)",
+      "value": "clamp(1.976rem, 1.705rem + 1.158vw, 2.747rem)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "primitive"
     },
     "--primitive-font-size-3xl": {
-      "value": "clamp(2.125rem, 1.75rem + 1.6vw, 3.433rem)",
+      "value": "clamp(2.223rem, 1.797rem + 1.818vw, 3.433rem)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "primitive"
     },
     "--primitive-font-size-4xl": {
-      "value": "clamp(2.5rem, 1.9rem + 2.57vw, 4.291rem)",
+      "value": "clamp(2.5rem, 1.869rem + 2.692vw, 4.292rem)",
       "usedInSelectors": [
         ":root"
       ],
@@ -1551,84 +1551,120 @@
     "--semantic-color-primary-text": {
       "value": "var(--semantic-color-primary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-secondary-text": {
       "value": "var(--semantic-color-secondary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-tertiary-text": {
       "value": "var(--semantic-color-tertiary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-quaternary-text": {
       "value": "var(--semantic-color-quaternary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-quinary-text": {
       "value": "var(--semantic-color-quinary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-state-success-text": {
       "value": "var(--semantic-color-state-success)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-state-error-text": {
       "value": "var(--semantic-color-state-error)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-state-warning-text": {
       "value": "var(--semantic-color-state-warning)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-state-info-text": {
       "value": "var(--semantic-color-state-info)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-primary-strong": {
       "value": "var(--semantic-color-primary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-state-success-strong": {
       "value": "var(--semantic-color-state-success)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-secondary-strong": {
       "value": "var(--semantic-color-secondary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
@@ -2328,28 +2364,40 @@
     "--semantic-color-code-tag": {
       "value": "var(--semantic-color-primary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-code-attr": {
       "value": "var(--semantic-color-secondary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-code-val": {
       "value": "var(--semantic-color-tertiary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
     "--semantic-color-code-fn": {
       "value": "var(--semantic-color-quaternary)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
@@ -2370,7 +2418,10 @@
     "--semantic-color-code-inline-fg": {
       "value": "var(--primitive-color-red-600)",
       "usedInSelectors": [
-        ":root"
+        ":root",
+        ":root:not([data-theme=light])",
+        ":root[data-theme=light]",
+        ":root[data-theme=dark]"
       ],
       "category": "semantic"
     },
@@ -3190,14 +3241,14 @@
       "category": "component"
     },
     "--component-button-primary-border": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-text)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "component"
     },
     "--component-button-primary-color-hover": {
-      "value": "var(--semantic-color-state-hover-primary)",
+      "value": "var(--semantic-color-primary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3232,7 +3283,7 @@
       "category": "component"
     },
     "--component-button-primary-filled-border": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3274,14 +3325,14 @@
       "category": "component"
     },
     "--component-button-secondary-border": {
-      "value": "var(--semantic-color-secondary)",
+      "value": "var(--semantic-color-secondary-text)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "component"
     },
     "--component-button-secondary-color-hover": {
-      "value": "var(--semantic-color-state-hover-secondary)",
+      "value": "var(--semantic-color-secondary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3316,7 +3367,7 @@
       "category": "component"
     },
     "--component-button-secondary-filled-border": {
-      "value": "var(--semantic-color-secondary)",
+      "value": "var(--semantic-color-secondary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3358,14 +3409,14 @@
       "category": "component"
     },
     "--component-button-tertiary-border": {
-      "value": "var(--semantic-color-tertiary)",
+      "value": "var(--semantic-color-tertiary-text)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "component"
     },
     "--component-button-tertiary-color-hover": {
-      "value": "var(--semantic-color-state-hover-tertiary)",
+      "value": "var(--semantic-color-tertiary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3400,7 +3451,7 @@
       "category": "component"
     },
     "--component-button-tertiary-filled-border": {
-      "value": "var(--semantic-color-tertiary)",
+      "value": "var(--semantic-color-tertiary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3442,14 +3493,14 @@
       "category": "component"
     },
     "--component-button-quaternary-border": {
-      "value": "var(--semantic-color-quaternary)",
+      "value": "var(--semantic-color-quaternary-text)",
       "usedInSelectors": [
         ":root"
       ],
       "category": "component"
     },
     "--component-button-quaternary-color-hover": {
-      "value": "var(--semantic-color-state-hover-quaternary)",
+      "value": "var(--semantic-color-quaternary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -3484,7 +3535,7 @@
       "category": "component"
     },
     "--component-button-quaternary-filled-border": {
-      "value": "var(--semantic-color-quaternary)",
+      "value": "var(--semantic-color-quaternary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -4121,7 +4172,7 @@
       "category": "component"
     },
     "--component-check-border-color-hover": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-strong)",
       "usedInSelectors": [
         ":root"
       ],
@@ -4212,7 +4263,7 @@
       "category": "component"
     },
     "--component-radio-border-color-hover": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-strong)",
       "usedInSelectors": [
         ":root"
       ],
@@ -4611,7 +4662,7 @@
       "category": "component"
     },
     "--component-pagination-border-color-hover": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-strong)",
       "usedInSelectors": [
         ":root"
       ],
@@ -4625,7 +4676,7 @@
       "category": "component"
     },
     "--component-pagination-color-hover": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-text)",
       "usedInSelectors": [
         ":root"
       ],
@@ -4738,6 +4789,20 @@
     },
     "--component-list-ordered-counter-line-height": {
       "value": "var(--semantic-space-component-lg)",
+      "usedInSelectors": [
+        ":root"
+      ],
+      "category": "component"
+    },
+    "--component-list-ordered-counter-bg": {
+      "value": "var(--semantic-color-primary)",
+      "usedInSelectors": [
+        ":root"
+      ],
+      "category": "component"
+    },
+    "--component-list-ordered-counter-color": {
+      "value": "var(--semantic-color-on-primary)",
       "usedInSelectors": [
         ":root"
       ],
@@ -4912,7 +4977,7 @@
       "category": "component"
     },
     "--component-table-state-hover-border-color": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-strong)",
       "usedInSelectors": [
         ":root"
       ],
@@ -5520,7 +5585,7 @@
       "category": "component"
     },
     "--component-feature-card-border-color-hover": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-strong)",
       "usedInSelectors": [
         ":root"
       ],
@@ -6017,7 +6082,7 @@
       "category": "component"
     },
     "--component-blockquote-border-color": {
-      "value": "var(--semantic-color-primary)",
+      "value": "var(--semantic-color-primary-strong)",
       "usedInSelectors": [
         ":root"
       ],
@@ -7592,7 +7657,7 @@
       "category": "component"
     },
     "--reset-html-font": {
-      "value": "normal normal 500 16px/18px var(--semantic-font-family-primary)",
+      "value": "normal normal 500 100%/1.125 var(--semantic-font-family-primary)",
       "usedInSelectors": [
         ":root"
       ],

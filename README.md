@@ -1,7 +1,7 @@
 # SYX Design System
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-7c3aed.svg)
-![Version](https://img.shields.io/badge/version-5.0.0-7c3aed)
+![Version](https://img.shields.io/badge/version-5.1.0-7c3aed)
 ![CSS](<https://img.shields.io/badge/CSS-@layer%20%7C%20color--mix()-informational>)
 ![Sass](https://img.shields.io/badge/Sass-Dart%20Sass-CC6699?logo=sass)
 
@@ -49,15 +49,13 @@ section lies, that check goes red.
 
 ### 1. Install
 
-> **Not on the npm registry yet.** `npm install syx-design-system` returns 404 until
-> the first release. Install straight from GitHub — npm packs the repository with the
-> same `files` list the registry package will use, and its `prepare` step builds `dist/`:
-
 ```bash
-npm install github:Pizarradas/syx
-# or pin a tagged release once one exists
-npm install github:Pizarradas/syx#v5.0.0
+npm install syx-design-system
 ```
+
+Each release is published with provenance, so `npm audit signatures` can check that it was built
+from this repository. A tagged release also installs straight from GitHub, where the `prepare` step
+builds `dist/`: `npm install github:Pizarradas/syx#v5.1.0`.
 
 ### 2. Import one theme (and the JS, only if you use tabs)
 
@@ -259,11 +257,13 @@ version it has installed — not against whatever is on `main` today.
 | `syx-design-system/scss/...` | SCSS source, to compile your own build |
 | `syx-design-system/contracts/resolved-tokens.json` | Every token resolved, 7 themes × light/dark |
 | `syx-design-system/tokens.json`, `/component-registry.json` | Registries |
-| `npx syx-mcp` | The MCP server, from the installed package (from GitHub too) |
+| `npx syx-mcp` | The MCP server, from the installed package |
+| `npx syx-tintas-respaldo <sheet.css> <partial.scss>` | For a theme of your own: writes its brand inks as literals for browsers without relative colour syntax (see `THEMING-RULES.md`) |
 
-Releases are cut by pushing a `vX.Y.Z` tag: `.github/workflows/release.yml` checks
+Before tagging, `npm run build:metricas` writes `metrics/X.Y.Z.json` — package size, gzip of every sheet in `dist/`, font bytes per theme, scanner warnings on the theme template and the number of guards — and prints the difference with the previous version; the release checks it and attaches it. Releases are cut by pushing a `vX.Y.Z` tag: `.github/workflows/release.yml` checks
 that the tag, `package.json` and `CHANGELOG.md` agree, runs the full chain and
-attaches the package and the minified sheets to a GitHub release.
+attaches the package and the minified sheets to a GitHub release. It also publishes to npm while the
+repository variable `PUBLICAR_NPM` is `true`. Build, release and publish are three jobs with the least permissions each: the one that publishes to npm installs nothing, authenticates with Trusted Publishing (OIDC, no stored token) and publishes the very `.tgz` attached to the release, checked by its sha256, with `--ignore-scripts`. `npm run check:acciones` guards that, and that every action is pinned to a commit SHA.
 
 ### Working on SYX itself
 
@@ -342,7 +342,7 @@ Register it in any MCP client (Claude Desktop, Claude Code, Cursor…):
 ```json
 {
   "mcpServers": {
-    "syx": { "command": "npx", "args": ["-y", "syx-mcp"] }
+    "syx": { "command": "npx", "args": ["-y", "-p", "syx-design-system", "syx-mcp"] }
   }
 }
 ```
@@ -457,8 +457,8 @@ read without running anything, and `classify_change` serves them over MCP.
 
 | Tier | What | Why |
 | ---- | ---- | --- |
-| **Automatic** | Docs, changelog, derived artifacts | A mistake is visible in the diff and reaches nothing compiled |
-| **Via proposal** | Component tokens, components, utilities | Scoped to one component — reviewable at a glance, but it ships |
+| **Automatic** | Derived artifacts: `css/`, generated contracts, the registry | A generator writes them and a guard checks the result |
+| **Via proposal** | Docs, changelog, component tokens, components, utilities | Scoped to one component — reviewable at a glance, but it ships |
 | **Human only** | Primitives, semantics, themes, mixins, the guards, the rules themselves | One change lands in all 7 themes at once, or changes the criteria everything else is judged by |
 
 Anything that matches no pattern falls to **human only**. `contracts/rules.json`,
@@ -706,12 +706,26 @@ The table with what each one looks like and how to import it is in the
 
 ---
 
+## Versioning
+
+SYX follows [semantic versioning](https://semver.org). What counts as public:
+
+| Stable | Not stable |
+| ------ | ---------- |
+| `--semantic-*` tokens, the `exports` of the package, documented classes and modifiers, the Node API, the MCP tools, `syx-scan` and `syx-init` flags | `--primitive-*`, `--component-*`, anything under `scripts/` that is not a `bin`, `scss/site/`, the contents of `contracts/` beyond `rules.json` |
+
+- **Major:** removes or renames something stable. A removal is announced first: the name keeps working as a deprecated alias for at least one minor release, and `@deprecated` says what replaces it.
+- **Minor:** adds something, or makes a guard stricter so that code which used to pass can now fail.
+- **Patch:** fixes something without changing what is stable.
+
+Report vulnerabilities as [SECURITY.md](SECURITY.md) explains. Contributing: [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Status
 
 Deliberately undated: the dated facts live in `CHANGELOG.md`, and the measured ones
 are regenerated by the guards instead of being copied here.
 
-- **Package**: installable from GitHub; not yet published to the npm registry. The
+- **Package**: published on npm as `syx-design-system`. The
   version is the badge at the top, which `check:version` keeps in step with `package.json`.
 - **Components**: the inventory is `component-registry.json`, rendered in
   [`docs.html` → Component reference](docs.html#components). Any count of components

@@ -8,10 +8,10 @@ Antes de que cualquier modo SYX ejecute, Atlas lee `atlas-rules/` y entrega este
 
 ```
 Jerarquía editorial:
-  N1: [elemento principal — exactamente 1]        → atom-headline--3xl / --xl
-  N2: [stories secundarias — máx 4]               → atom-headline--lg
-  N3: [grid de contenido — máx 9]                 → atom-headline--md / --sm
-  N4: [metadatos, etiquetas, fechas — sin límite] → atom-headline--xs o body
+  N1: [elemento principal — exactamente 1]        → atom-title--h1 / --h2
+  N2: [stories secundarias — máx 4]               → atom-title--h3
+  N3: [grid de contenido — máx 9]                 → atom-title--h4 / --h5
+  N4: [metadatos, etiquetas, fechas — sin límite] → atom-title--h6 o body
 
 Zona:        hero · grid-editorial · sidebar · zona-secundaria · footer
 Densidad:    baja (N1) · media (N2) · alta (N3)
@@ -142,5 +142,5 @@ Si se necesita una agrupación diferente, separar en turnos.
 | Combinación | Por qué no |
 |---|---|
 | `[ATLAS]: ... utilizando [SYX: SKETCH + AUDIT]` | SKETCH está exento de contratos. AUDIT sobre un sketch es contradictorio. |
-| `[ATLAS]: ... utilizando [SYX: CREATIVE + AUDIT]` | CREATIVE está exento de R01–R08. Usar `CREATIVE → TOKEN → UI + AUDIT`. |
+| `[ATLAS]: ... utilizando [SYX: CREATIVE + AUDIT]` | CREATIVE está exento de R01–R11. Usar `CREATIVE → TOKEN → UI + AUDIT`. |
 | `[ATLAS]:` sin modo SYX | `[ATLAS]:` es un wrapper, no un modo. Siempre necesita al menos un `[SYX: MODE]`. |

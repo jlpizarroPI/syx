@@ -37,12 +37,12 @@
   --component-pagination-border-width: var(--semantic-border-width-default);
   --component-pagination-border-radius: var(--semantic-border-radius-default);
   --component-pagination-border-color: transparent;
-  --component-pagination-border-color-hover: var(--semantic-color-primary);
+  --component-pagination-border-color-hover: var(--semantic-color-primary-strong); // trazo: 3:1 (1.4.11), no el relleno
 
   // PAGINATION: COLORS & STATES
   // ================================================
   --component-pagination-color: var(--semantic-color-primary-text);
-  --component-pagination-color-hover: var(--semantic-color-primary);
+  --component-pagination-color-hover: var(--semantic-color-primary-text);
   --component-pagination-color-active: var(--semantic-color-on-primary);
   --component-pagination-bg-active: var(--semantic-color-primary);
   --component-pagination-color-disabled: var(--semantic-color-state-disabled);

@@ -29,6 +29,18 @@ const { crearConsulta } = require('./lib/consulta');
 const ROOT = path.join(__dirname, '..');
 const syx = crearConsulta({ root: ROOT });
 
+// El primario del tema de la muestra, preguntado al sistema (lo mismo que
+// responde get_token) y no copiado a mano: con el valor escrito aquí, cambiar
+// la marca de syx-sketch rompía la prueba por la razón equivocada, y una marca
+// de prueba no se podía pasar por el escáner sin reescribirla.
+const PRIMARIO = (() => {
+  const t = syx.getToken({ token: '--semantic-color-primary', theme: 'syx-sketch' });
+  if (!t.found || t.isExpression) throw new Error(`--semantic-color-primary de syx-sketch no es un color literal: ${t.value}`);
+  // El caso 1 necesita un fallback que NO coincida con el sistema.
+  if (t.value.toLowerCase() === '#6d28d9') throw new Error('el primario es #6d28d9: el caso del fallback caducado ya no prueba nada');
+  return t.value;
+})();
+
 // ─── El fichero de mentira, con la respuesta escrita al lado ─────────────────
 
 const MUESTRA = `<!doctype html>
@@ -40,11 +52,11 @@ const MUESTRA = `<!doctype html>
     /* 2 · token que no existe: el fallback se pinta SIEMPRE */
     border-color: var(--semantic-color-inventado, #123456);
     /* 3 · valor a pelo que ya es token */
-    background: oklch(0.498 0.282 266.24);
+    background: ${PRIMARIO};
     /* 4 · contrato roto en el consumidor */
     padding: 1rem !important;
     /* 5 · fallback que SÍ coincide: no debe salir */
-    outline-color: var(--semantic-color-primary, oklch(0.498 0.282 266.24));
+    outline-color: var(--semantic-color-primary, ${PRIMARIO});
     /* 13 · var() SIN fallback de un token que no existe: el peor caso */
     box-shadow: var(--semantic-shadow-que-no-existe);
     /* 14 · var() sin fallback de uno que SÍ existe: no debe salir */
@@ -67,7 +79,7 @@ const MUESTRA = `<!doctype html>
   <!-- 10 · lo mismo pero DENTRO de un ejemplo: nada de esto debe salir -->
   <pre><code>&lt;p class="atom-otro-inventado"&gt;
   color: var(--semantic-color-primary, #6d28d9);
-  background: oklch(0.498 0.282 266.24);
+  background: ${PRIMARIO};
   margin: 0 !important;
 &lt;/p&gt;</code></pre>
   <script>document.body.className = 'syx syx--theme-' + tema;</script>
@@ -96,7 +108,7 @@ const uno = (tipo, trozo) => {
 comprobar('el fallback caducado, con los dos valores enfrentados', () => {
   const h = uno('fallback-desviado', '--semantic-color-primary');
   if (!h.detalle.includes('#6d28d9')) throw new Error('no dice lo que pinta la aplicación');
-  if (!h.detalle.includes('oklch')) throw new Error('no dice lo que dice el sistema');
+  if (!h.detalle.includes(PRIMARIO)) throw new Error('no dice lo que dice el sistema');
   if (h.gravedad !== 'alta') throw new Error(`gravedad ${h.gravedad}: un color desviado es lo más caro de todo`);
 });
 
@@ -122,7 +134,7 @@ comprobar('no señala un var() sin fallback de un token que sí existe', () => {
 });
 
 comprobar('el color a pelo, nombrando el token que ya lo tiene', () => {
-  const h = uno('valor-a-pelo', 'oklch(0.498 0.282 266.24)');
+  const h = uno('valor-a-pelo', PRIMARIO);
   if (!h.sugerencia.includes('--semantic-')) throw new Error(`sugiere ${h.sugerencia}, y debe ser un semántico`);
 });
 
@@ -138,6 +150,17 @@ comprobar('el modificador que no pinta nada', () => {
 comprobar('la clase con pinta de SYX que no existe, con la real al lado', () => {
   const h = uno('clase-fantasma', 'atom-txtx');
   if (!h.sugerencia) throw new Error('no sugiere ninguna parecida');
+});
+
+comprobar('no denuncia el ancla de un bloque cuyos elementos existen', () => {
+  // `.mol-tabs` no declara nada, pero agrupa `__list`, `__tab` y `__panel`. El
+  // Quick Start del README la usa: denunciarla dejaba en rojo a quien lo copiaba.
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'syx-ancla-'));
+  const f = path.join(dir, 'tabs.html');
+  fs.writeFileSync(f, '<div class="mol-tabs"><div class="mol-tabs__list"></div></div>');
+  const r = escanear({ files: [f], syx });
+  fs.rmSync(dir, { recursive: true, force: true });
+  if (JSON.stringify(r.hallazgos).includes('.mol-tabs ')) throw new Error('la denuncia, y sus elementos existen en el CSS');
 });
 
 comprobar('no denuncia una clase que pinta por selector de atributo', () => {
@@ -444,6 +467,94 @@ comprobar('sobre las páginas reales no denuncia nada que sí exista', () => {
     }
   }
   if (!r.hallazgos.length && !paginas.length) throw new Error('no ha leído ninguna página');
+});
+
+// ─── Un tema se juzga con el contrato de THEMING-RULES, no con el de una app ──
+// Hasta la 5.1 el escáner daba 14 avisos medios a la propia plantilla de tema:
+// trataba como desviación declarar la paleta propia, leerla y escribirla con
+// literales, que es justo lo que THEMING-RULES pide (plan 2026-11, F1-05).
+
+const temaFalso = path.join(tmp, '_theme.scss');
+fs.writeFileSync(temaFalso, `@mixin theme-falso {
+  :root {
+    --primitive-color-brand-500: oklch(0.6 0.2 30);
+    --semantic-color-primary: var(--primitive-color-brand-500);
+    --semantic-color-text-primary: ${PRIMARIO};
+    --component-x-bg: var(--primitive-color-brand-500);
+    --component-y-color: ${PRIMARIO};
+    --semantic-color-inventado: var(--semantic-color-primary);
+    @supports (color: oklch(0 0 0)) { --semantic-shadow-xs: none; }
+  }
+  .falso { color: var(--primitive-color-brand-500); }
+  @include dark-mode-tokens;
+}
+`);
+const informeTema = escanear({ files: [temaFalso], syx });
+const enTema = (tipo, trozo) => informeTema.hallazgos.filter((h) => h.tipo === tipo && JSON.stringify(h).includes(trozo));
+
+comprobar('tema: su paleta propia, leída y escrita con literales, no es desviación', () => {
+  const malos = informeTema.hallazgos.filter((h) => /brand-500 se declara|--semantic-color-primary|--semantic-color-text-primary|oklch\(0 0 0\)/.test(h.que) && !/--component-/.test(h.que));
+  if (malos.length) throw new Error(malos.map((h) => `L${h.linea} ${h.tipo}: ${h.que}`).join('\n     '));
+});
+comprobar('tema: un --component-* que lee un primitivo o un color a pelo (R11)', () => {
+  if (!enTema('primitivo-en-app', '--component-x-bg lee --primitive-color-brand-500').length) throw new Error('no ve el primitivo en --component-x-bg');
+  if (!enTema('valor-a-pelo', PRIMARIO).some((h) => h.linea === 7)) throw new Error('no ve el color a pelo en --component-y-color (línea 7)');
+});
+comprobar('tema: un --semantic-* que el sistema no tiene, y una regla que pinta con un primitivo', () => {
+  if (!enTema('token-usurpado', '--semantic-color-inventado').length) throw new Error('no ve --semantic-color-inventado');
+  if (!informeTema.hallazgos.some((h) => h.tipo === 'primitivo-en-app' && h.linea === 11)) throw new Error('no ve la regla .falso que pinta con un primitivo (línea 11)');
+});
+comprobar('tema: la plantilla y los siete temas de SYX dan 0 avisos altos y 0 medios', () => {
+  const dir = path.join(ROOT, 'scss', 'themes');
+  const temas = fs.readdirSync(dir).filter((t) => t === '_template' || fs.existsSync(path.join(ROOT, 'css', `styles-theme-${t}.css`)));
+  const malos = [];
+  for (const t of temas) {
+    const files = fs.readdirSync(path.join(dir, t)).filter((f) => f.endsWith('.scss')).map((f) => path.join(dir, t, f));
+    const r = escanear({ files, syx, theme: t === '_template' ? 'syx-sketch' : t });
+    for (const h of r.hallazgos.filter((x) => x.gravedad !== 'baja')) malos.push(`${t} L${h.linea} ${h.tipo}: ${h.que}`);
+  }
+  if (temas.length < 8) throw new Error(`solo ${temas.length} temas`);
+  if (malos.length) throw new Error(malos.slice(0, 8).join('\n     '));
+  return `${temas.length} temas`;
+});
+
+// ─── Legibilidad y nombre accesible (plan 2026-11, F1-06) ────────────────────
+const legible = path.join(tmp, 'legible.html');
+fs.writeFileSync(legible, `<!doctype html><html><head><style>
+  .tabla-tomas td { font-variant-numeric: oldstyle-nums; }
+  .titulo { font-variant-numeric: oldstyle-nums; }
+  .estado-pill { font-size: clamp(0.64rem, 0.6rem + 0.1vw, 0.72rem); }
+  .estado-grande { font-size: 0.875rem; }
+</style></head><body>
+<button aria-label="Marcar dosis">Tomada</button>
+<button aria-label="Tomada a las 9:00">Tomada</button>
+<a href="#" aria-label="Ver en GitHub">GitHub</a>
+<button aria-label="Cerrar"><span class="atom-icon" aria-hidden="true"></span></button>
+<pre><code>&lt;button aria-label="Otra cosa"&gt;Visible&lt;/button&gt;</code></pre>
+</body></html>`);
+const informeLegible = escanear({ files: [legible], syx });
+const enLegible = (tipo) => informeLegible.hallazgos.filter((h) => h.tipo === tipo);
+
+comprobar('cifras de estilo antiguo en una tabla, y solo en datos', () => {
+  const h = enLegible('cifras-de-estilo-antiguo');
+  if (h.length !== 1 || !/tabla-tomas/.test(h[0].que)) throw new Error(`esperaba solo .tabla-tomas td: ${h.map((x) => x.que).join(' | ') || 'nada'}`);
+});
+comprobar('una etiqueta de estado por debajo de 14 px, por su mínimo, como aviso', () => {
+  const h = enLegible('etiqueta-de-estado-pequena');
+  if (h.length !== 1 || !/estado-pill/.test(h[0].que) || h[0].gravedad !== 'baja') throw new Error(h.map((x) => `${x.gravedad} ${x.que}`).join(' | ') || 'nada');
+});
+comprobar('nombre accesible que no contiene el texto visible (WCAG 2.5.3), sin tocar iconos ni ejemplos', () => {
+  const h = enLegible('nombre-sin-texto-visible');
+  const medias = h.filter((x) => x.gravedad === 'media').map((x) => x.que);
+  const bajas = h.filter((x) => x.gravedad === 'baja').map((x) => x.que);
+  if (medias.length !== 1 || !/Marcar dosis/.test(medias[0])) throw new Error(`medias: ${medias.join(' | ') || 'ninguna'}`);
+  if (bajas.length !== 1 || !/Ver en GitHub/.test(bajas[0])) throw new Error(`bajas: ${bajas.join(' | ') || 'ninguna'}`);
+});
+
+comprobar('las páginas propias pasan el escáner sin reglas apagadas (check:vitrina sin --ignorar)', () => {
+  const vitrina = require(path.join(ROOT, 'package.json')).scripts['check:vitrina'] || '';
+  if (!/--fallar-si-media/.test(vitrina)) throw new Error(`check:vitrina no falla con avisos medios: ${vitrina}`);
+  if (/--ignorar/.test(vitrina)) throw new Error(`check:vitrina apaga reglas: ${vitrina}`);
 });
 
 comprobar('sobre home.html no inventa desviación donde no la hay', () => {

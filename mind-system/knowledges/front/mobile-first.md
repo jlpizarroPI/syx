@@ -53,20 +53,20 @@ Si el diseño funciona en esas condiciones, escalar hacia condiciones mejores es
 
 ```scss
 // ✓ Mobile-first: base para móvil, overrides para pantallas mayores
-.mol-card-grid {
+.umbra-card-grid {
   display: grid;
   grid-template-columns: 1fr;        // móvil: columna única
 
-  @include breakpoint(sm) {          // 640px+
+  @include breakpoint(phablet) {     // 600px+
     grid-template-columns: 1fr 1fr;
   }
-  @include breakpoint(lg) {          // 1024px+
+  @include breakpoint(laptop) {      // 1024px+
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 // ✗ Mobile-last: señal de diseño desde desktop
-.mol-card-grid {
+.umbra-card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 
@@ -84,18 +84,21 @@ Si el diseño funciona en esas condiciones, escalar hacia condiciones mejores es
 | Nombre | `min-width` | Uso típico |
 |--------|-------------|-----------|
 | base | — | 320px — columna única, layout de flujo |
-| `sm` | 640px | Dos columnas, CTAs inline |
-| `md` | 768px | Sidebar visible, formularios side-by-side |
-| `lg` | 1024px | Tres columnas, layout editorial completo |
-| `xl` | 1200px | Max-width del contenedor, ajustes de espaciado |
+| `sm` · `phablet` | 37.5em (600px) | Dos columnas, CTAs inline |
+| `md` · `tablet` | 48em (768px) | Sidebar visible, formularios side-by-side |
+| `lg` · `laptop` | 64em (1024px) | Tres columnas, layout editorial completo |
+| `xl` · `desktop` | 80em (1280px) | Ajustes de espaciado, colapso de la navegación |
+| `xxl` · `wide` | 90em (1440px) | Max-width del contenedor |
+
+Es el mapa `$syx-breakpoints` de `scss/abstracts/mixins/_media-queries.scss`, que lee la escala de `scss/abstracts/tokens/primitives/_breakpoints.scss` (una sola escala desde noviembre de 2026). Una clave que no esté ahí es un error de compilación.
 
 **Documentar siempre** el comportamiento de cada breakpoint en el HTML:
 
 ```html
 <!-- RESPONSIVE:
   - base (320px): columna única, imagen arriba del texto
-  - sm (640px+): dos columnas, imagen a la izquierda
-  - lg (1024px+): tres columnas con sidebar
+  - phablet (600px+): dos columnas, imagen a la izquierda
+  - laptop (1024px+): tres columnas con sidebar
 -->
 ```
 
@@ -109,11 +112,11 @@ La estructura del HTML refleja la prioridad del contenido para el usuario, no la
 
 ```html
 <!-- ✓ Correcto: contenido principal primero en el DOM -->
-<div class="org-grid-editorial">
-  <main class="org-grid-editorial__content">   <!-- N1 y N2 aquí -->
+<div class="diario-grid-editorial">
+  <main class="diario-grid-editorial__content">   <!-- N1 y N2 aquí -->
     …
   </main>
-  <aside class="org-grid-editorial__sidebar">  <!-- datos de mercado, publicidad -->
+  <aside class="diario-grid-editorial__sidebar">  <!-- datos de mercado, publicidad -->
     …
   </aside>
 </div>
@@ -163,7 +166,7 @@ Cada componente interactivo tiene un estado funcional sin JavaScript:
 ```html
 <!-- No-JS: el menú es una lista visible y navegable -->
 <!-- JS: colapsa el menú en un toggle con aria-expanded -->
-<nav class="mol-menu-principal">
+<nav class="umbra-menu-principal">
   <ul>
     <li><a href="/economia">Economía</a></li>
   </ul>

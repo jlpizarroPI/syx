@@ -8,25 +8,31 @@
     <!-- Primary meta -->
     <title>SYX Design System — Why SYX: A Measured Comparison</title>
     <meta name="description"
-        content="A self-assessment of SYX against Shadcn UI, Tailwind CSS, Chakra UI, Bootstrap, Material UI and Ant Design across 14 criteria, separating measured facts from checkable facts from opinion. SYX comes second overall.">
+        content="A self-assessment of SYX against Shadcn UI, Tailwind CSS, Chakra UI, Bootstrap, Material UI and Ant Design across 14 criteria, separating measured facts from checkable facts from opinion. SYX ties for first overall.">
     <meta name="author" content="José Luis Pizarro">
     <meta name="keywords"
         content="CSS design system, design tokens, CSS @layer, Atomic Design, Dart Sass, responsive, WCAG, SYX, Tailwind CSS, Material UI, Chakra UI, Ant Design">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://github.com/Pizarradas/syx">
+    <link rel="canonical" href="https://pizarradas.github.io/syx/why-syx.html">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SYX Design System">
     <meta property="og:title" content="SYX Design System — Why SYX: A Measured Comparison">
     <meta property="og:description" content="Written by the author of SYX. Measured, checkable and judged claims kept apart. SYX ties Shadcn UI for first overall — and says why that tie deserves suspicion.">
-    <meta property="og:url" content="https://github.com/Pizarradas/syx">
+    <meta property="og:url" content="https://pizarradas.github.io/syx/why-syx.html">
+    <meta property="og:image" content="https://pizarradas.github.io/syx/assets/og-image.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="640">
+    <meta property="og:image:height" content="640">
+    <meta property="og:image:alt" content="Syx Design System">
 
     <!-- Twitter / X Card -->
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="SYX Design System — Why SYX: A Measured Comparison">
     <meta name="twitter:description" content="Written by the author of SYX. Measured, checkable and judged claims kept apart. SYX ties Shadcn UI for first overall — and says why that tie deserves suspicion.">
     <meta name="twitter:creator" content="@Pizarradas">
+    <meta name="twitter:image" content="https://pizarradas.github.io/syx/assets/og-image.jpg">
 
     <!-- Theme color (mobile browser chrome) -->
     <meta name="theme-color" content="#6d28d9">
@@ -134,7 +140,7 @@
 
             <a href="https://github.com/Pizarradas/syx"
                 class="atom-btn atom-btn--primary atom-btn--filled atom-btn--has-icon atom-btn--size-sm"
-                aria-label="View on GitHub" target="_blank" rel="noopener">
+                aria-label="GitHub repository" target="_blank" rel="noopener">
                 <span class="atom-icon atom-icon--lc-github" aria-hidden="true"></span>
                 <span class="syx-d-sm-up">GitHub</span>
             </a>
@@ -223,7 +229,7 @@
                     <p class="atom-txt syx-mb-1" style="font-size:0.85rem">
                         <strong>Re-measured:</strong> October 2026 &nbsp;·&nbsp;
                         <strong>Versions:</strong>
-                        <!-- why-syx:versiones -->SYX v5.0.0 &nbsp;·&nbsp; Shadcn UI (2026 registry) &nbsp;·&nbsp; Tailwind CSS 4.3.3 &nbsp;·&nbsp; Chakra UI 3.37 &nbsp;·&nbsp; Bootstrap 5.3.8 &nbsp;·&nbsp; Material UI 9.4 &nbsp;·&nbsp; Ant Design 6.6<!-- /why-syx:versiones -->
+                        <!-- why-syx:versiones -->SYX v5.1.0 &nbsp;·&nbsp; Shadcn UI (2026 registry) &nbsp;·&nbsp; Tailwind CSS 4.3.3 &nbsp;·&nbsp; Chakra UI 3.37 &nbsp;·&nbsp; Bootstrap 5.3.8 &nbsp;·&nbsp; Material UI 9.4 &nbsp;·&nbsp; Ant Design 6.6<!-- /why-syx:versiones -->
                     </p>
                     <p class="atom-txt syx-mb-0" style="font-size:0.8rem;color:var(--semantic-color-text-secondary)">
                         April 2026 scored SYX v4.2.0 against Material UI v6 and Ant Design v5 and kept those scores after both shipped a new major; September fixed that and added three criteria. October re-measures SYX at 5.0.0 after three internal audits, and re-checks the other six at their current versions: none shipped a new major, so their scores stand. SYX&rsquo;s own scores and the profile weights now live in <code>contracts/why-syx.json</code>, and the tables below are generated from it, so a score cannot change in one table and not in the others. Scores are a dated snapshot, not a live ranking.
@@ -237,7 +243,7 @@
             <section id="measured" aria-labelledby="measured-heading" class="syx-mb-5">
                 <h2 class="atom-title atom-title--h2 syx-mb-1" id="measured-heading">Measured: what SYX actually is</h2>
                 <p class="atom-txt syx-text-gray syx-mb-4">Nothing in this table is an estimate or a round number.
-                    Each row names the command that produces it, against SYX v5.0.0.</p>
+                    Each row names the command that produces it, against SYX v5.1.0.</p>
 
                 <div class="syx-border syx-bg-gray-50 syx-p-3 syx-mb-4 syx-overflow-auto" role="region" tabindex="0" aria-label="Measured: what SYX actually is (table)">
                     <table class="atom-table" style="min-width:820px">
@@ -251,8 +257,8 @@
                         <tbody>
                             <tr>
                                 <td style="text-align:left">Weight of a theme bundle</td>
-                                <td style="text-align:left"><strong>49.3 – 56.4 kB gzipped</strong><br>
-                                    <span style="font-size:0.85em;color:var(--semantic-color-text-secondary)">317–399 kB raw · 39.2–43.4 kB brotli · 7 themes, as published (Prepros, minified). The reference theme is the heaviest because it also carries this site&rsquo;s own layer</span></td>
+                                <td style="text-align:left"><strong>51.3 – 59.0 kB gzipped</strong><br>
+                                    <span style="font-size:0.85em;color:var(--semantic-color-text-secondary)">363–451 kB raw · 40.4–44.8 kB brotli · 7 themes, with the site layer (<code>dist/</code>, without it: 40.6–43.4 kB gzipped, 253–282 kB raw), as published (Prepros, minified). The reference theme is the heaviest because it also carries this site&rsquo;s own layer</span></td>
                                 <td style="text-align:left"><code>gzip -9</code> and brotli 11 over <code>css/styles-theme-*.css</code></td>
                             </tr>
                             <tr>
@@ -291,7 +297,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align:left">Source size</td>
-                                <td style="text-align:left"><strong>218 SCSS files · 18,669 lines</strong></td>
+                                <td style="text-align:left"><strong>221 SCSS files · 19,045 lines</strong></td>
                                 <td style="text-align:left"><code>scss/</code></td>
                             </tr>
                             <tr>
@@ -302,8 +308,8 @@
                             </tr>
                             <tr>
                                 <td style="text-align:left">Contrast, all seven themes</td>
-                                <td style="text-align:left"><strong>3,052 / 3,052 measurements pass WCAG AA</strong><br>
-                                    <span style="font-size:0.85em;color:var(--semantic-color-text-secondary)">109 text and UI pairs × 7 themes × light, dark and their states, enforced by <code>npm run check:contraste</code>. What it does not measure yet — the outline button&rsquo;s hover and the site pages under the six demo themes — is in <a href="#loses">Where SYX loses</a></span></td>
+                                <td style="text-align:left"><strong>3,304 / 3,304 measurements pass WCAG AA</strong><br>
+                                    <span style="font-size:0.85em;color:var(--semantic-color-text-secondary)">118 text and UI pairs × 7 themes × light, dark and their states, enforced by <code>npm run check:contraste</code>. What it does not measure yet — the outline button&rsquo;s hover and the site pages under the six demo themes — is in <a href="#loses">Where SYX loses</a></span></td>
                                 <td style="text-align:left"><code>npm run check:contraste</code></td>
                             </tr>
                             <tr>
@@ -652,7 +658,7 @@
                         <strong>Ready-made UI, 2 → 3</strong>: 40 components now include tooltip, toast, menu,
                         dialog, tabs, progress, skeleton, avatar, card and an app shell — still no combobox, drawer,
                         data grid or date picker, which is why it is not a 4. <strong>Accessibility, 3 → 4</strong>:
-                        contrast is now enforced by a guard (3,052 measurements, 0 below AA, all seven themes) and
+                        contrast is now enforced by a guard (3,304 measurements, 0 below AA, all seven themes) and
                         axe, keyboard and focus tests run in CI on every component — but forced-colors mode and
                         WCAG 2.4.11 still fail, measured, so not a 5. <strong>Interactive behaviour, 1 → 3</strong>:
                         five optional vanilla modules give tabs, an APG menu button, tooltips that meet 1.4.13 and a
@@ -1144,7 +1150,7 @@
                     <div class="layout-grid__col-xs-12 layout-grid__col-md-6 syx-mb-4">
                         <div class="syx-h-full">
                             <span class="atom-pill atom-pill--dark syx-mb-3" style="display:inline-block">Not a small system to learn</span>
-                            <p class="atom-txt syx-mb-3">18,669 lines of SCSS across 218 files, 1,127 tokens in the public contract, a four-tier token cascade, eleven contract rules, ten agent modes, twelve MCP tools and 39 guards. The pay-off is that an agent can be told no by a machine instead of by a reviewer — but the surface a human has to hold is not small.</p>
+                            <p class="atom-txt syx-mb-3">19,045 lines of SCSS across 221 files, 1,127 tokens in the public contract, a four-tier token cascade, eleven contract rules, ten agent modes, twelve MCP tools and 39 guards. The pay-off is that an agent can be told no by a machine instead of by a reviewer — but the surface a human has to hold is not small.</p>
                             <p class="atom-txt syx-mb-0 syx-text-gray">Bootstrap scores 5 on learning curve. SYX scores 3.</p>
                         </div>
                     </div>
@@ -1429,7 +1435,7 @@
             </a>
 
             <div class="org-home-footer__meta">
-                <strong>SYX Design System</strong> · v5.0.0<br>
+                <strong>SYX Design System</strong> · v5.1.0<br>
                 Modular CSS design system · Zero external dependencies
             </div>
 

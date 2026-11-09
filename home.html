@@ -13,7 +13,7 @@
   <meta name="keywords"
     content="CSS design system, design tokens, CSS @layer, Atomic Design, Dart Sass, responsive, WCAG, SYX, AI First, AI-operable, agent workflows">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://github.com/Pizarradas/syx">
+  <link rel="canonical" href="https://pizarradas.github.io/syx/home.html">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -21,14 +21,20 @@
   <meta property="og:title" content="SYX Design System — CSS Tokens, @layer &amp; Atomic Design">
   <meta property="og:description"
     content="Modular CSS design system with zero external dependencies. 7-layer token architecture (Primitive, Semantic, Component + Layout, Reset, Icon, Theme), Atomic Design, native @layer. 7 themes. WCAG AA.">
-  <meta property="og:url" content="https://github.com/Pizarradas/syx">
+  <meta property="og:url" content="https://pizarradas.github.io/syx/home.html">
+  <meta property="og:image" content="https://pizarradas.github.io/syx/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="640">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="Syx Design System">
 
   <!-- Twitter / X Card -->
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SYX Design System — CSS Tokens, @layer &amp; Atomic Design">
   <meta name="twitter:description"
     content="Modular CSS design system — zero dependencies, 7-layer tokens, Atomic Design, native @layer. 7 themes. WCAG AA.">
   <meta name="twitter:creator" content="@Pizarradas">
+  <meta name="twitter:image" content="https://pizarradas.github.io/syx/assets/og-image.jpg">
 
   <!-- Theme color (mobile browser chrome) -->
   <meta name="theme-color" content="#6d28d9">
@@ -147,7 +153,7 @@
 
       <a href="https://github.com/Pizarradas/syx"
         class="atom-btn atom-btn--primary atom-btn--filled atom-btn--has-icon atom-btn--size-sm"
-        aria-label="View on GitHub" target="_blank" rel="noopener">
+        aria-label="GitHub repository" target="_blank" rel="noopener">
         <span class="atom-icon atom-icon--lc-github" aria-hidden="true"></span>
         GitHub
       </a>
@@ -172,7 +178,7 @@
   <section class="org-home-hero" id="hero" aria-labelledby="hero-headline">
 
     <span class="org-home-hero__overline">
-      <span class="atom-pill atom-pill--primary">SYX v5.0 · CSS Design System</span>
+      <span class="atom-pill atom-pill--primary">SYX v5.1 · CSS Design System</span>
     </span>
 
     <h1 class="org-home-hero__headline" id="hero-headline">
@@ -210,11 +216,11 @@
         <span class="atom-stat__label">Current&nbsp;version</span>
       </div>
       <div class="atom-stat">
-        <span class="atom-stat__number">19</span>
+        <span class="atom-stat__number">23</span>
         <span class="atom-stat__label">Atoms</span>
       </div>
       <div class="atom-stat">
-        <span class="atom-stat__number">6</span>
+        <span class="atom-stat__number">15</span>
         <span class="atom-stat__label">Molecules</span>
       </div>
       <div class="atom-stat">
@@ -700,7 +706,7 @@
         </span>
         <h3 class="mol-feature-card__title">Automated validation</h3>
         <p class="mol-feature-card__body">
-          <code>syx-validate.js</code> enforces seven contract rules (R01–R07) against
+          <code>syx-validate.js</code> enforces eleven contract rules (R01–R11) against
           every SCSS file and cross-checks runtime CSS against the token registry —
           undocumented tokens, phantom entries and unprefixed legacy vars included.
           CI-ready, exits non-zero on violations.
@@ -905,7 +911,7 @@
                 <small>N files · 2–4 turns</small>
               </td>
               <td class="atom-table__td" style="white-space: nowrap;"><strong>nothing</strong></td>
-              <td class="atom-table__td">Validate the contract rules — R01–R04, R09 and R10 are errors, R05, R06 and R08 warnings, R07 info — plus naming and structure checks</td>
+              <td class="atom-table__td">Validate the contract rules — R01–R04 and R09–R11 are errors, R05, R06 and R08 warnings, R07 info — plus naming and structure checks</td>
               <td class="atom-table__td">Per-rule verdict report, violations with exact line, correction recommendations</td>
             </tr>
             <tr>
@@ -957,7 +963,7 @@
       <p class="org-home-features__modes-sub syx-mt-3">
         <strong>What &ldquo;AI cost&rdquo; counts.</strong> The file column is what a mode has to open
         when it can <em>only</em> open files. With the MCP server registered
-        (<code>npx -y syx-mcp</code>) most of those reads collapse into one call that returns one
+        (<code>npx -y -p syx-design-system syx-mcp</code>) most of those reads collapse into one call that returns one
         answer, and the tier ranks the work rather than the reading. It counts interrogating the
         system — tokens, registry, contracts — not the knowledge a mode loads to reason with, which
         is a separate axis declared per mode.
@@ -980,7 +986,7 @@
     </h2>
 
     <p class="org-home-cta__sub">
-      Clone the repository, compile with Dart Sass and link the appropriate bundle to your page.
+      Install it from npm, import one theme and write the markup.
       A complete design system running in under 5 minutes.
     </p>
 
@@ -991,9 +997,9 @@
       </a>
     </div>
 
-    <code class="org-home-cta__code" role="group" aria-label="Compilation command">
+    <code class="org-home-cta__code" role="group" aria-label="Install command">
       <span class="atom-icon atom-icon--lc-terminal" aria-hidden="true"></span>
-      sass scss/styles-theme-syx-sketch.scss css/styles-theme-syx-sketch.css
+      npm install syx-design-system
     </code>
 
   </section>
@@ -1013,7 +1019,7 @@
       </a>
 
       <div class="org-home-footer__meta">
-        <strong>SYX Design System</strong> · v5.0.0<br>
+        <strong>SYX Design System</strong> · v5.1.0<br>
         Modular CSS design system · Zero external dependencies
       </div>
 

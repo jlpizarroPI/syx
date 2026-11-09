@@ -6,6 +6,7 @@ Modes let you activate a specific lens when working with SYX. Instead of a gener
 
 Prefix your message with `[SYX: MODE]:` to activate a mode:
 
+<!-- syx: ejemplo-nuevo -->
 ```
 [SYX: UX]: Design a notification banner with dismiss action
 [SYX: UI]: Implement the atom-tag component with --primary and --neutral variants
@@ -21,6 +22,7 @@ honour it.
 
 In Claude Code there is a second door to the same room, `.claude/commands/syx.md`:
 
+<!-- syx: ejemplo-nuevo -->
 ```
 /syx UI implement the atom-tag component with --primary and --neutral variants
 /syx UX → TOKEN → UI + AUDIT a search field with autocomplete
@@ -55,7 +57,7 @@ Modes are calibrated by AI context consumption and output complexity. Pick the l
 | 10 | **ROADMAP** | 🟠 Medium-High | 1–2 | `find_capability` (every idea), `get_component`, `get_token`, `classify_change` |
 
 The cost of a mode used to be measured in files loaded. With the MCP server registered
-(`npm run mcp`, or `npx -y syx-mcp`) most of those reads become one call that returns one
+(`npm run mcp`, or `npx -y -p syx-design-system syx-mcp`) most of those reads become one call that returns one
 answer — the last column says which. The tier still ranks the *work*, not the reading.
 
 ## Available Modes
@@ -115,7 +117,7 @@ If a middle step turns out to have no work — TOKEN finds every token it needed
 the user's call, not the mode's.
 
 Not every pair composes. `SKETCH + AUDIT` and `CREATIVE + AUDIT` are contradictions (both modes are
-exempt from the contracts AUDIT enforces); `UI → TOKEN` and `THEME → UI` run the dependency
+exempt from the contracts AUDIT enforces); `UI → TOKEN` and `THEME → UI` without BRAND in front run the dependency
 backwards, and so do `UI → BRAND` and `THEME → BRAND` — an identity is decided before the palette
 that carries it, not after. `BRAND + AUDIT` **is** valid, unlike the other two recommendation-only
 pairs: BRAND's output already names real tokens, so AUDIT has something to check.
@@ -151,6 +153,7 @@ This boundary is deliberate. A UX pass and a UI pass on the same problem produce
 ## Typical Workflows
 
 ### Standard component workflow
+<!-- syx: ejemplo-nuevo -->
 ```
 1. [SYX: UX]: Design the search input with autocomplete dropdown
    → Defines HTML, components, states, a11y requirements
@@ -166,6 +169,7 @@ This boundary is deliberate. A UX pass and a UI pass on the same problem produce
 ```
 
 ### Idea validation workflow (low cost)
+<!-- syx: ejemplo-nuevo -->
 ```
 1. [SYX: SKETCH]: Quick layout of a card grid with filter bar
    → Instant HTML + inline styles, no file reads, single turn
@@ -194,7 +198,7 @@ This boundary is deliberate. A UX pass and a UI pass on the same problem produce
    → The component the identity asked for, built to contract
 
 5. npm run build && npm run validate
-   → Every bundle compiles, R01–R07 clean. This is where an identity stops being a document.
+   → Every bundle compiles, R01–R11 clean. This is where an identity stops being a document.
 
 6. [SYX: AUDIT]: Check the pages against the identity contract
    → Contract violations as R-findings; identity invariants as advisory; scan_for_drift
@@ -210,6 +214,7 @@ identity that *cannot* skip them is telling you something — it needs vocabular
 does not have yet, and BRAND has to say which, not improvise around it.
 
 ### Creative exploration workflow
+<!-- syx: ejemplo-nuevo -->
 ```
 1. [SYX: CREATIVE]: Experimental hero section — scroll-driven parallax type
    → Self-contained HTML + CSS, advanced techniques, technique log
